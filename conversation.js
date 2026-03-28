@@ -21,45 +21,55 @@ let userName = '';
 
 const conversationSteps = {
 
-    // --- STEP 1: Hook - warm opener like the compliment card ---
+    // --- STEP 1: Hook - like the compliment card, just give something warm ---
     start: {
         messages: [
-            "Hey, welkom! 👋",
-            "Wist je dat jij vandaag iemand blij kunt maken... én tegelijk de wereld een beetje groener? 🌱"
+            "Hey! 😊",
+            "Even een complimentje voor jou: fijn dat je er bent. Dat meen ik!"
         ],
         options: [
-            { text: "Vertel me meer!", next: "intro" },
-            { text: "Hoe dan? 🤔", next: "intro" },
-            { text: "Ik kijk gewoon even rond", next: "soft_intro" }
+            { text: "Haha, dankje! 😄", next: "compliment_react" },
+            { text: "Dat is lief! 😊", next: "compliment_react" },
+            { text: "Wie ben jij dan? 🤔", next: "compliment_react" }
         ]
     },
 
-    // --- STEP 2a: For curious visitors ---
+    // --- STEP 1b: After the compliment, casual follow-up ---
+    compliment_react: {
+        messages: [
+            "Wij zijn van Bollebos — we delen graag complimentjes. Op markten, online, overal eigenlijk 😄",
+            "Ken je ons al?"
+        ],
+        options: [
+            { text: "Nee, nog niet!", next: "ken_niet" },
+            { text: "Ja!", next: "returning_visitor" },
+            { text: "De naam klinkt bekend", next: "ken_niet" }
+        ]
+    },
+
+    // --- STEP 2: Casual introduction ---
+    ken_niet: {
+        messages: [
+            "Oké, heel kort dan! 😊",
+            "Wij zijn een klein project rond natuur en verbinding. We planten bomen en maken mensen blij met mooie kaarten.",
+            "Mag ik je één dingetje vragen?"
+        ],
+        options: [
+            { text: "Ja hoor!", next: "intro" },
+            { text: "Tuurlijk, ga je gang", next: "intro" }
+        ]
+    },
+
+    // --- STEP 3: Find their interest ---
     intro: {
         messages: [
-            "Top! 😊",
-            "Ik ben van Bollebos, een project dat mensen verbindt via de natuur.",
-            "Maar eerst even over jou — wat brengt je hier vandaag?"
+            "Wat spreekt jou meer aan?"
         ],
         options: [
             { text: "Ik zoek een origineel cadeau 🎁", next: "interest_cadeau" },
             { text: "Ik hou van natuur & bomen 🌳", next: "interest_natuur" },
-            { text: "Ik wil iets goed doen voor de planeet 🌍", next: "interest_planeet" },
-            { text: "Gewoon benieuwd!", next: "interest_benieuwd" }
-        ]
-    },
-
-    // --- STEP 2b: Soft intro for browsers ---
-    soft_intro: {
-        messages: [
-            "Geen probleem! Kijk gerust rond. 😊",
-            "Maar mag ik je één ding vragen?",
-            "Ken je Bollebos al?"
-        ],
-        options: [
-            { text: "Nee, wat is het?", next: "explain_bollebos" },
-            { text: "Ja, ik ken jullie!", next: "returning_visitor" },
-            { text: "De naam klinkt bekend", next: "explain_bollebos" }
+            { text: "Ik wil iets goed doen 🌍", next: "interest_planeet" },
+            { text: "Ik ben gewoon benieuwd!", next: "interest_benieuwd" }
         ]
     },
 
