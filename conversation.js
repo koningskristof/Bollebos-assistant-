@@ -1,9 +1,9 @@
 /**
- * Bollebos Conversational Flow
+ * Bollebos Conversational Flow — Kristof speaking
  *
  * Mimics the successful market approach:
- * 1. Hook (compliment/warm opener)
- * 2. "Ken je Bollebos?" introduction
+ * 1. Hook (random opener — fun question, weetje, or warm greeting)
+ * 2. Casual intro as Kristof
  * 3. Tell the story, find connection points
  * 4. Ask for support (wenskaarten / boomcadeau)
  */
@@ -14,115 +14,209 @@ const revealSection = document.getElementById('revealSection');
 
 // Track conversation state for personalized CTA
 let userInterests = [];
-let userName = '';
+
+// ===== Random opener system =====
+// Different hooks to keep it fresh — like having different compliment cards
+
+const openers = [
+    // Opener A: Fun question
+    {
+        messages: [
+            "Hey! Ik ben Kristof 👋",
+            "Snelle vraag: als jij een boom mocht planten, waar zou dat zijn?"
+        ],
+        options: [
+            { text: "In mijn eigen tuin!", next: "opener_react_tuin" },
+            { text: "Ergens in een bos 🌲", next: "opener_react_bos" },
+            { text: "Geen idee eigenlijk 😅", next: "opener_react_geen_idee" }
+        ]
+    },
+    // Opener B: Fun fact
+    {
+        messages: [
+            "Hey! Kristof hier 👋",
+            "Wist je dat één boom genoeg zuurstof maakt voor twee mensen per jaar? Ik vind dat nog altijd mind-blowing 🌳"
+        ],
+        options: [
+            { text: "Wow, dat wist ik niet!", next: "weetje_react" },
+            { text: "Cool! Wie ben je?", next: "weetje_react" },
+            { text: "Waarom vertel je me dit? 😄", next: "weetje_react" }
+        ]
+    },
+    // Opener C: Seasonal / weather
+    {
+        messages: [
+            "Hey! Ik ben Kristof 👋",
+            "Zeg, ben jij ook zo iemand die blij wordt van een wandeling in het groen? Of ben ik de enige? 😄"
+        ],
+        options: [
+            { text: "Ja, helemaal!", next: "wandeling_react_ja" },
+            { text: "Hangt van het weer af 😅", next: "wandeling_react_weer" },
+            { text: "Wie is Kristof? 🤔", next: "wandeling_react_wie" }
+        ]
+    }
+];
 
 // ===== Conversation Tree =====
-// Each step has: messages (bot says), options (user can pick), and next step logic
 
 const conversationSteps = {
 
-    // --- STEP 1: Hook - like the compliment card, just give something warm ---
-    start: {
+    // --- Opener reactions (all lead to casual intro) ---
+
+    opener_react_tuin: {
         messages: [
-            "Hey! 😊",
-            "Even een complimentje voor jou: fijn dat je er bent. Dat meen ik!"
+            "In je eigen tuin! Dat is het mooiste eigenlijk, elke dag naar buiten kijken en zien hoe die groeit 🌱",
+            "Ik ben trouwens Kristof, ik doe iets met bomen en mensen blij maken. Klinkt vaag hè? 😄"
         ],
         options: [
-            { text: "Haha, dankje! 😄", next: "compliment_react" },
-            { text: "Dat is lief! 😊", next: "compliment_react" },
-            { text: "Wie ben jij dan? 🤔", next: "compliment_react" }
+            { text: "Haha, een beetje ja!", next: "kristof_intro" },
+            { text: "Klinkt interessant!", next: "kristof_intro" }
         ]
     },
 
-    // --- STEP 1b: After the compliment, casual follow-up ---
-    compliment_react: {
+    opener_react_bos: {
         messages: [
-            "Wij zijn van Bollebos — we delen graag complimentjes. Op markten, online, overal eigenlijk 😄",
-            "Ken je ons al?"
+            "In een bos! Mooi, een boom tussen z'n soortgenoten 🌲",
+            "Ik ben trouwens Kristof. Ik plant effectief bomen — geen grap. Mag ik je even vertellen waarom?"
         ],
         options: [
-            { text: "Nee, nog niet!", next: "ken_niet" },
-            { text: "Ja!", next: "returning_visitor" },
-            { text: "De naam klinkt bekend", next: "ken_niet" }
+            { text: "Ja, vertel!", next: "kristof_intro" },
+            { text: "Echt? Hoe dan?", next: "kristof_intro" }
         ]
     },
 
-    // --- STEP 2: Casual introduction ---
-    ken_niet: {
+    opener_react_geen_idee: {
         messages: [
-            "Oké, heel kort dan! 😊",
-            "Wij zijn een klein project rond natuur en verbinding. We planten bomen en maken mensen blij met mooie kaarten.",
-            "Mag ik je één dingetje vragen?"
+            "Geen stress! De meeste mensen hebben daar nog nooit over nagedacht 😄",
+            "Ik ben Kristof, en ik denk eigenlijk de hele dag over bomen na. Klinkt raar, maar het is best leuk!"
         ],
         options: [
-            { text: "Ja hoor!", next: "intro" },
-            { text: "Tuurlijk, ga je gang", next: "intro" }
+            { text: "Haha, vertel!", next: "kristof_intro" },
+            { text: "Oké, ik luister 😄", next: "kristof_intro" }
         ]
     },
 
-    // --- STEP 3: Find their interest ---
-    intro: {
+    weetje_react: {
         messages: [
-            "Wat spreekt jou meer aan?"
+            "Haha ja, ik gooi graag leuke weetjes rond 😄",
+            "Ik ben Kristof. Ik ben nogal bezig met bomen en natuur — het is eigenlijk een heel verhaal."
         ],
         options: [
-            { text: "Ik zoek een origineel cadeau 🎁", next: "interest_cadeau" },
-            { text: "Ik hou van natuur & bomen 🌳", next: "interest_natuur" },
-            { text: "Ik wil iets goed doen 🌍", next: "interest_planeet" },
-            { text: "Ik ben gewoon benieuwd!", next: "interest_benieuwd" }
+            { text: "Vertel!", next: "kristof_intro" },
+            { text: "Ik ben benieuwd", next: "kristof_intro" },
+            { text: "Hou het kort 😄", next: "kristof_intro_kort" }
+        ]
+    },
+
+    wandeling_react_ja: {
+        messages: [
+            "Ah top, dan zijn we al twee! 😄",
+            "Ik ben Kristof. Mijn liefde voor natuur is een beetje uit de hand gelopen... op de mooiste manier."
+        ],
+        options: [
+            { text: "Hoe bedoel je?", next: "kristof_intro" },
+            { text: "Klinkt goed!", next: "kristof_intro" }
+        ]
+    },
+
+    wandeling_react_weer: {
+        messages: [
+            "Haha fair enough! Ik ga bij elk weer naar buiten, ik ben een beetje gek 😅",
+            "Ik ben Kristof trouwens. Ik doe iets met natuur en ik zou je er graag even over vertellen."
+        ],
+        options: [
+            { text: "Ga je gang!", next: "kristof_intro" },
+            { text: "Oké, kort dan 😄", next: "kristof_intro_kort" }
+        ]
+    },
+
+    wandeling_react_wie: {
+        messages: [
+            "Goede vraag! Ik ben Kristof, een bollebosser 🌳",
+            "Ik vertel je zo wat dat betekent — maar eerst..."
+        ],
+        options: [],
+        autoNext: "kristof_intro"
+    },
+
+    // --- Kristof's intro ---
+    kristof_intro: {
+        messages: [
+            "Ik heb Bollebos gestart vanuit een simpel idee: mensen samenbrengen rond natuur.",
+            "We staan op markten, delen complimentjes aan voorbijgangers, planten bomen, en maken mooie kaarten.",
+            "Eigenlijk proberen we gewoon de wereld een beetje warmer en groener te maken 💚",
+            "Wat spreekt jou daarin aan?"
+        ],
+        options: [
+            { text: "De bomen! 🌳", next: "interest_natuur" },
+            { text: "Mooie kaarten klinkt leuk 💌", next: "interest_cadeau" },
+            { text: "Het verhaal erachter", next: "het_verhaal" },
+            { text: "Alles eigenlijk! 😄", next: "interest_benieuwd" }
+        ]
+    },
+
+    kristof_intro_kort: {
+        messages: [
+            "Kort dan: ik plant bomen en maak mensen blij. Dat is Bollebos in één zin! 🌳😄",
+            "Maar nu jij — wat vind je leuker?"
+        ],
+        options: [
+            { text: "Bomen! 🌳", next: "interest_natuur" },
+            { text: "Mensen blij maken! 💌", next: "interest_cadeau" },
+            { text: "Allebei!", next: "interest_benieuwd" }
         ]
     },
 
     // --- Interest branches ---
     interest_cadeau: {
         messages: [
-            "Ah, een origineel cadeau zoeker! Dat treft. 😄",
-            "Bij Bollebos kun je letterlijk een boom cadeau geven aan iemand. Geen gadget dat in een la belandt, maar iets dat groeit en leeft!",
-            "En we hebben ook prachtige wenskaarten die een glimlach op het gezicht toveren. 💌",
-            "Spreekt dit je aan?"
+            "Oh dan moet je dit horen! 😄",
+            "Ik maak wenskaarten — maar niet zomaar kaarten. Elke kaart draagt een mooie boodschap, en met de opbrengst planten we bomen.",
+            "En weet je wat ook kan? Je kunt iemand letterlijk een boom cadeau geven. Ja echt, een echte boom! 🌳",
+            "Wat klinkt leuker?"
         ],
         onEnter: () => userInterests.push('cadeau'),
         options: [
             { text: "Een boom cadeau geven? Vertel!", next: "boomcadeau_detail" },
-            { text: "De wenskaarten klinken leuk!", next: "wenskaarten_detail" },
-            { text: "Maar wat is het verhaal erachter?", next: "het_verhaal" }
+            { text: "De kaarten wil ik zien!", next: "wenskaarten_detail" },
+            { text: "Maar hoe is dit allemaal begonnen?", next: "het_verhaal" }
         ]
     },
 
     interest_natuur: {
         messages: [
-            "Een natuurliefhebber! 🌿 Dan zit je hier goed.",
-            "Bollebos is gestart vanuit een simpel idee: samen bomen planten en mensen verbinden met de natuur.",
-            "Elke boom die we planten is een stukje toekomst. En het mooie is: iedereen kan meedoen!",
-            "Wat trekt je het meeste aan?"
+            "Een bomenliefhebber! Dan snap je mij 😄",
+            "Ik ben begonnen met het planten van bomen, en daar is een heel project uit gegroeid.",
+            "Elke boom die we planten is een stukje toekomst. En het mooie: iedereen kan meedoen.",
+            "Wil je weten hoe?"
         ],
         onEnter: () => userInterests.push('natuur'),
         options: [
-            { text: "Hoe kan ik meedoen?", next: "meedoen" },
-            { text: "Waar planten jullie bomen?", next: "het_verhaal" },
-            { text: "Kan ik iemand anders betrekken?", next: "boomcadeau_detail" }
+            { text: "Ja! Hoe kan ik meedoen?", next: "meedoen" },
+            { text: "Vertel meer over het project", next: "het_verhaal" },
+            { text: "Kan ik iemand een boom geven?", next: "boomcadeau_detail" }
         ]
     },
 
     interest_planeet: {
         messages: [
-            "Wat fijn dat je dat belangrijk vindt! 🌍",
-            "Wij geloven dat kleine acties groot verschil maken. Elke boom telt, elke kaart die je stuurt draagt een boodschap.",
-            "Bollebos maakt het makkelijk om iets concreets te doen — geen grote gebaren nodig, gewoon een mooi gebaar.",
-            "Hoe wil jij bijdragen?"
+            "Dat vind ik mooi om te horen! 🌍",
+            "Ik geloof echt dat kleine dingen groot verschil maken. Een boom planten, een kaart sturen met een mooie boodschap...",
+            "Dat is wat ik elke dag probeer te doen met Bollebos.",
+            "Hoe zou jij willen bijdragen?"
         ],
         onEnter: () => userInterests.push('planeet'),
         options: [
             { text: "Een boom planten via een cadeau 🌳", next: "boomcadeau_detail" },
             { text: "Een kaart sturen met impact 💌", next: "wenskaarten_detail" },
-            { text: "Vertel me eerst meer over het project", next: "het_verhaal" }
+            { text: "Vertel me eerst meer over jouw verhaal", next: "het_verhaal" }
         ]
     },
 
     interest_benieuwd: {
         messages: [
-            "Nieuwsgierigheid is het mooiste begin! 😊",
-            "Laat me je even meenemen in ons verhaal..."
+            "Haha, alles! Dat hoor ik graag 😄",
+            "Laat me je dan even meenemen in hoe dit allemaal begonnen is..."
         ],
         onEnter: () => userInterests.push('benieuwd'),
         options: [],
@@ -132,49 +226,49 @@ const conversationSteps = {
     // --- Core story ---
     explain_bollebos: {
         messages: [
-            "Bollebos is een project dat mensen samenbrengt rondom natuur. 🌳",
-            "We planten bomen, maar het gaat om meer dan dat — het gaat om verbinding. Met de natuur, met elkaar, en met de toekomst.",
-            "Via onze wenskaarten en boomcadeaus kan iedereen een steentje bijdragen. Letterlijk: je geeft iemand een boom, en die boom groeit terwijl jullie band groeit. 💚",
+            "Bollebos is eigenlijk mijn manier om iets terug te geven aan de natuur 🌳",
+            "We planten bomen, maar het gaat om meer dan dat — het gaat om verbinding. Met de natuur, met elkaar.",
+            "Via onze kaarten en boomcadeaus kan iedereen meedoen. Je geeft iemand een boom, en die groeit terwijl jullie band groeit 💚",
             "Wat vind je daarvan?"
         ],
         options: [
-            { text: "Dat is een prachtig idee!", next: "positive_reaction" },
+            { text: "Prachtig idee, Kristof!", next: "positive_reaction" },
             { text: "Hoe werkt zo'n boomcadeau?", next: "boomcadeau_detail" },
-            { text: "Vertel meer over de wenskaarten", next: "wenskaarten_detail" }
+            { text: "Vertel over de kaarten", next: "wenskaarten_detail" }
         ]
     },
 
     het_verhaal: {
         messages: [
-            "Het begon met een simpele vraag: hoe maken we de wereld een beetje groener én een beetje leuker? 🌱",
-            "We staan regelmatig op markten. Daar geven we complimentenkaartjes aan voorbijgangers — gewoon, om hun dag een beetje mooier te maken.",
-            "En weet je? Van die kleine, warme momenten groeien grote dingen. Net als bomen. 🌳",
-            "Zo is Bollebos ontstaan: vanuit warmte en verbinding."
+            "Oké, het verhaal 😊",
+            "Het begon eigenlijk op markten. Ik deelde complimentenkaartjes uit aan voorbijgangers — gewoon, om hun dag mooier te maken.",
+            "En weet je? Mensen begonnen te lachen, te praten, te vertellen. Van die kleine momenten groeide iets groots.",
+            "Zo is Bollebos geboren: vanuit warmte, complimentjes, en een liefde voor bomen 🌳💚"
         ],
         options: [
             { text: "Wat een mooi verhaal! 💚", next: "positive_reaction" },
-            { text: "Hoe kan ik helpen?", next: "steun_opties" },
+            { text: "Hoe kan ik je helpen?", next: "steun_opties" },
             { text: "Vertel over de producten", next: "steun_opties" }
         ]
     },
 
     returning_visitor: {
         messages: [
-            "Wat leuk dat je ons kent! 🥰",
-            "Fijn dat je weer even langskomt. We hebben altijd nieuwe kaarten en boomcadeaus.",
-            "Waar kan ik je vandaag mee helpen?"
+            "Oh leuk, je kent Bollebos al! 😊",
+            "Fijn dat je weer even langskomt. Er zijn altijd nieuwe kaarten en boomcadeaus.",
+            "Waar kan ik je mee helpen?"
         ],
         options: [
             { text: "Ik wil een boomcadeau geven", next: "boomcadeau_detail" },
             { text: "Laat de wenskaarten zien", next: "wenskaarten_detail" },
-            { text: "Ik wil meer weten over het project", next: "het_verhaal" }
+            { text: "Vertel me meer over het project", next: "het_verhaal" }
         ]
     },
 
     positive_reaction: {
         messages: [
-            "Dankjewel! Dat vinden wij ook. 😊",
-            "En het mooiste: jij kunt er deel van uitmaken!",
+            "Dankjewel! Dat doet me echt plezier 😊",
+            "En weet je wat het mooiste is? Jij kunt er ook deel van uitmaken.",
             "Wil je weten hoe je Bollebos kunt steunen?"
         ],
         options: [
@@ -186,8 +280,8 @@ const conversationSteps = {
     meedoen: {
         messages: [
             "Super dat je wilt meedoen! 💪",
-            "De makkelijkste manier om Bollebos te steunen is via onze producten. Elke aankoop helpt ons om meer bomen te planten.",
-            "Je hebt twee opties:"
+            "De makkelijkste manier is via onze producten. Elke aankoop helpt me om meer bomen te planten.",
+            "Ik laat je even zien wat er is:"
         ],
         options: [],
         autoNext: "steun_opties"
@@ -196,66 +290,66 @@ const conversationSteps = {
     // --- Product details ---
     boomcadeau_detail: {
         messages: [
-            "Een boomcadeau is echt iets bijzonders! 🌳🎁",
+            "Dit is echt mijn favoriete ding om over te vertellen 🌳🎁",
             "Je geeft iemand letterlijk een boom. Die boom wordt geplant en groeit mee met jullie verhaal.",
-            "Perfect voor een verjaardag, geboorte, huwelijk, of gewoon... omdat het kan!",
-            "Elke boom krijgt een plek en draagt bij aan een groener landschap.",
-            "Wil je een boomcadeau bekijken?"
+            "Perfect voor een verjaardag, geboorte, huwelijk... of gewoon omdat het kan!",
+            "Ik vind het elke keer weer bijzonder om zo'n boom te planten voor iemand.",
+            "Wil je het zien?"
         ],
         onEnter: () => userInterests.push('boom'),
         options: [
             { text: "Ja, ik wil een boom geven! 🌳", next: "cta_boom" },
             { text: "En de wenskaarten dan?", next: "wenskaarten_detail" },
-            { text: "Ik twijfel nog", next: "twijfel" }
+            { text: "Ik twijfel nog even", next: "twijfel" }
         ]
     },
 
     wenskaarten_detail: {
         messages: [
-            "Onze wenskaarten zijn niet zomaar kaarten! 💌",
-            "Ze zijn gemaakt met liefde, bevatten een mooie boodschap, en met elke aankoop steun je het planten van bomen.",
-            "Perfect om iemand een glimlach te bezorgen — net zoals wij doen op de markten met onze complimentenkaartjes! 😊",
-            "Wil je de collectie bekijken?"
+            "Onze wenskaarten, daar ben ik ook trots op! 💌",
+            "Ze zijn gemaakt met liefde, elke kaart heeft een mooie boodschap. En met de opbrengst planten we bomen.",
+            "Het is eigenlijk dezelfde energie als de complimentenkaartjes op de markt — iemand een glimlach bezorgen 😊",
+            "Wil je ze zien?"
         ],
         onEnter: () => userInterests.push('kaarten'),
         options: [
-            { text: "Ja, laat maar zien! 💌", next: "cta_kaarten" },
+            { text: "Ja, laat zien! 💌", next: "cta_kaarten" },
             { text: "En het boomcadeau?", next: "boomcadeau_detail" },
-            { text: "Ik twijfel nog", next: "twijfel" }
+            { text: "Ik twijfel nog even", next: "twijfel" }
         ]
     },
 
     // --- Support options ---
     steun_opties: {
         messages: [
-            "Er zijn twee mooie manieren om Bollebos te steunen:"
+            "Er zijn twee manieren waarop je kunt helpen:"
         ],
         options: [
             { text: "💌 Wenskaarten bekijken", next: "cta_kaarten" },
             { text: "🌳 Een boom cadeau geven", next: "cta_boom" },
-            { text: "Ik wil allebei zien!", next: "cta_beide" }
+            { text: "Allebei! 😄", next: "cta_beide" }
         ]
     },
 
     // --- Hesitation handler ---
     twijfel: {
         messages: [
-            "Geen druk hoor! 😊",
-            "Weet je wat? Heel veel mensen die op onze marktkraam langskomen twijfelen ook even. Maar zodra ze de kaarten of boomcadeaus zien, worden ze enthousiast.",
-            "Misschien helpt het om gewoon even te kijken? Vrijblijvend!"
+            "Helemaal oké, geen druk! 😊",
+            "Weet je, op markten twijfelen mensen ook vaak even. Maar zodra ze de kaarten of boomcadeaus echt zien, worden ze enthousiast.",
+            "Gewoon even kijken? Vrijblijvend, beloofd!"
         ],
         options: [
             { text: "Oké, laat maar zien dan 😄", next: "cta_beide" },
-            { text: "Vertel me nog iets over het project", next: "het_verhaal" }
+            { text: "Vertel me nog iets over Bollebos", next: "het_verhaal" }
         ]
     },
 
     // --- CTA endpoints ---
     cta_boom: {
         messages: [
-            "Geweldig! 🎉",
+            "Top! 🎉",
             "Hieronder vind je meer info over het boomcadeau. Een cadeau dat letterlijk groeit!",
-            "Bedankt dat je Bollebos wilt steunen — samen maken we de wereld groener! 💚🌳"
+            "Bedankt dat je Bollebos wilt steunen — dat betekent echt veel voor mij 💚🌳"
         ],
         onEnter: () => showRevealSection('boom'),
         options: [
@@ -266,9 +360,9 @@ const conversationSteps = {
 
     cta_kaarten: {
         messages: [
-            "Top! 💌🎉",
-            "Hieronder vind je onze wenskaarten. Elke kaart draagt een boodschap en steunt het planten van bomen.",
-            "Bedankt dat je Bollebos wilt steunen — samen maken we de wereld groener! 💚"
+            "Super! 💌🎉",
+            "Hieronder vind je onze wenskaarten. Elke kaart draagt een boodschap én steunt het planten van bomen.",
+            "Bedankt — dit soort steun houdt Bollebos draaiende 💚"
         ],
         onEnter: () => showRevealSection('kaarten'),
         options: [
@@ -280,8 +374,8 @@ const conversationSteps = {
     cta_beide: {
         messages: [
             "Fantastisch! 🎉🌳💌",
-            "Hieronder vind je beide opties. Of je nu een boom geeft of een kaart stuurt — elk gebaar telt!",
-            "Bedankt voor je interesse in Bollebos. Samen maken we de wereld mooier! 💚"
+            "Hieronder vind je allebei. Of je nu een boom geeft of een kaart stuurt — elk gebaar telt!",
+            "Echt bedankt voor je interesse. Dit soort steun maakt het verschil 💚"
         ],
         onEnter: () => showRevealSection('beide'),
         options: [],
@@ -290,7 +384,7 @@ const conversationSteps = {
 
     cta_kaarten_extra: {
         messages: [
-            "Natuurlijk! De wenskaarten zijn nu ook zichtbaar hieronder. 💌"
+            "Natuurlijk! De wenskaarten staan er nu ook bij 💌"
         ],
         onEnter: () => highlightProduct('kaarten'),
         options: [],
@@ -299,7 +393,7 @@ const conversationSteps = {
 
     cta_boom_extra: {
         messages: [
-            "Natuurlijk! Het boomcadeau is nu ook zichtbaar hieronder. 🌳"
+            "Natuurlijk! Het boomcadeau staat er nu ook bij 🌳"
         ],
         onEnter: () => highlightProduct('boom'),
         options: [],
@@ -362,7 +456,7 @@ async function playStep(stepName) {
     // Show messages one by one with typing delay
     for (let i = 0; i < step.messages.length; i++) {
         addTypingIndicator();
-        await delay(800 + step.messages[i].length * 15); // Longer messages = longer typing
+        await delay(800 + step.messages[i].length * 15);
         removeTypingIndicator();
         addMessage(step.messages[i]);
         await delay(300);
@@ -378,11 +472,9 @@ async function playStep(stepName) {
 }
 
 function handleChoice(option) {
-    // Show user's choice as a message
     addMessage(option.text, true);
     clearOptions();
 
-    // Small delay before bot responds
     setTimeout(() => {
         playStep(option.next);
     }, 500);
@@ -412,7 +504,6 @@ function showRevealSection(type) {
         cardKaarten.style.display = 'block';
     }
 
-    // Smooth scroll to products after a moment
     setTimeout(() => {
         revealSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 800);
@@ -429,8 +520,10 @@ function highlightProduct(type) {
     }, 500);
 }
 
-// ===== Start the conversation =====
-// Small delay so the page loads first
+// ===== Start with a random opener =====
 setTimeout(() => {
+    const opener = openers[Math.floor(Math.random() * openers.length)];
+    // Inject the random opener as the "start" step
+    conversationSteps.start = opener;
     playStep('start');
 }, 800);
