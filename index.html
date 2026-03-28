@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bollebos - Samen bomen planten, samen groeien</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Hero section behind the conversation -->
+    <div class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Bollebos</h1>
+            <p class="hero-subtitle">Samen bomen planten, samen groeien</p>
+        </div>
+    </div>
+
+    <!-- Chat conversation widget -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <div class="chat-avatar">🌳</div>
+            <div class="chat-header-text">
+                <span class="chat-name">Bollebos</span>
+                <span class="chat-status">Online</span>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages get inserted here dynamically -->
+        </div>
+        <div class="chat-options" id="chatOptions">
+            <!-- Response buttons get inserted here dynamically -->
+        </div>
+    </div>
+
+    <!-- Hidden sections that reveal after conversation -->
+    <div class="reveal-section" id="revealSection" style="display:none;">
+        <div class="products-section">
+            <h2>Steun Bollebos</h2>
+            <div class="products-grid">
+                <div class="product-card" id="cardWenskaarten">
+                    <div class="product-icon">💌</div>
+                    <h3>Wenskaarten</h3>
+                    <p>Prachtige kaarten met een boodschap. Elke kaart steunt het planten van bomen.</p>
+                    <a href="#wenskaarten" class="product-btn">Bekijk wenskaarten</a>
+                </div>
+                <div class="product-card" id="cardBoomcadeau">
+                    <div class="product-icon">🎁</div>
+                    <h3>Boomcadeau</h3>
+                    <p>Geef een boom cadeau! Een uniek en duurzaam geschenk dat blijft groeien.</p>
+                    <a href="#boomcadeau" class="product-btn">Geef een boom</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="conversation.js"></script>
+</body>
+</html>

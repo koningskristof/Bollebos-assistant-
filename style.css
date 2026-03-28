@@ -1,0 +1,408 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --green-dark: #2d5a27;
+    --green-mid: #4a8c3f;
+    --green-light: #7bc86c;
+    --green-pale: #e8f5e3;
+    --warm-white: #fefcf8;
+    --warm-cream: #f9f3e8;
+    --text-dark: #2c2c2c;
+    --text-mid: #5a5a5a;
+    --text-light: #8a8a8a;
+    --shadow-soft: 0 2px 16px rgba(0,0,0,0.08);
+    --shadow-medium: 0 4px 24px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+}
+
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--warm-cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ===== Hero ===== */
+.hero {
+    width: 100%;
+    min-height: 40vh;
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 50%, var(--green-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '🌲🌳🌿🍃🌱';
+    position: absolute;
+    font-size: 4rem;
+    opacity: 0.15;
+    letter-spacing: 2rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.hero-content {
+    text-align: center;
+    color: white;
+    z-index: 1;
+    padding: 2rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* ===== Chat Container ===== */
+.chat-container {
+    width: 100%;
+    max-width: 520px;
+    margin: -3rem auto 2rem;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+    z-index: 10;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+}
+
+.chat-header {
+    background: var(--green-dark);
+    color: white;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.chat-avatar {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.chat-header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.chat-status {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.chat-status::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--green-light);
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* ===== Messages Area ===== */
+.chat-messages {
+    flex: 1;
+    padding: 1.25rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    scroll-behavior: smooth;
+}
+
+.message {
+    max-width: 85%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    line-height: 1.5;
+    font-size: 0.95rem;
+    animation: messageIn 0.35s ease-out;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-bot {
+    background: var(--green-pale);
+    color: var(--text-dark);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.message-user {
+    background: var(--green-mid);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+/* Typing indicator */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 0.75rem 1rem;
+    align-self: flex-start;
+    background: var(--green-pale);
+    border-radius: var(--radius-sm);
+    border-bottom-left-radius: 4px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: var(--green-mid);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { opacity: 0.4; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-4px); }
+}
+
+/* ===== Options / Buttons ===== */
+.chat-options {
+    padding: 0.75rem 1.25rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+    min-height: 60px;
+    align-items: center;
+}
+
+.chat-options:empty {
+    display: none;
+}
+
+.option-btn {
+    background: white;
+    color: var(--green-dark);
+    border: 2px solid var(--green-mid);
+    border-radius: 24px;
+    padding: 0.55rem 1.15rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    animation: optionIn 0.3s ease-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes optionIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.option-btn:hover {
+    background: var(--green-mid);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(74, 140, 63, 0.3);
+}
+
+.option-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== Reveal Section ===== */
+.reveal-section {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+    animation: revealUp 0.6s ease-out;
+}
+
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.products-section h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--green-dark);
+    margin-bottom: 1.5rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+}
+
+.product-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.product-card h3 {
+    font-size: 1.3rem;
+    color: var(--green-dark);
+    margin-bottom: 0.5rem;
+}
+
+.product-card p {
+    color: var(--text-mid);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.product-btn {
+    display: inline-block;
+    background: var(--green-mid);
+    color: white;
+    text-decoration: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.product-btn:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(45, 90, 39, 0.3);
+}
+
+/* Highlighted card */
+.product-card.highlighted {
+    border: 2px solid var(--green-mid);
+    position: relative;
+}
+
+.product-card.highlighted::after {
+    content: 'Aanbevolen voor jou';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green-mid);
+    color: white;
+    padding: 0.2rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .hero {
+        min-height: 30vh;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem;
+    }
+
+    .chat-container {
+        margin: -2rem 0.75rem 1.5rem;
+        min-height: 380px;
+    }
+
+    .chat-messages {
+        padding: 1rem;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .option-btn {
+        padding: 0.5rem 0.9rem;
+        font-size: 0.85rem;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}
