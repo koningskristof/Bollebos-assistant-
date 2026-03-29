@@ -29,15 +29,14 @@ const complimentCards = [
 
 const conversationSteps = {
 
-    // --- STEP 1: Compliment card as opener ---
+    // --- STEP 1: Compliment card as fullscreen overlay ---
     start: {
         messages: [],
         onEnter: () => {
-            showComplimentCard();
+            showComplimentOverlay();
         },
         options: [],
-        // After card is shown, auto-proceed
-        delayedNext: { step: "after_compliment", delay: 1500 }
+        // Conversation continues after user dismisses overlay (see showComplimentOverlay)
     },
 
     after_compliment: {
@@ -367,23 +366,48 @@ function addMessage(text, isUser = false) {
     scrollToBottom();
 }
 
-function showComplimentCard() {
+function showComplimentOverlay() {
     const card = complimentCards[Math.floor(Math.random() * complimentCards.length)];
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'message message-bot compliment-card-wrapper';
-    wrapper.style.background = 'transparent';
-    wrapper.style.padding = '0';
-    wrapper.style.maxWidth = '90%';
+    // Create fullscreen overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'compliment-overlay';
+
+    const inner = document.createElement('div');
+    inner.className = 'compliment-overlay-inner';
+
+    const label = document.createElement('span');
+    label.className = 'compliment-overlay-label';
+    label.textContent = 'Een complimentje voor jou!';
 
     const img = document.createElement('img');
-    img.className = 'compliment-card-img';
+    img.className = 'compliment-overlay-img';
     img.src = card.image;
     img.alt = card.text;
 
-    wrapper.appendChild(img);
-    chatMessages.appendChild(wrapper);
-    scrollToBottom();
+    const btn = document.createElement('button');
+    btn.className = 'compliment-overlay-btn';
+    btn.textContent = 'Dankje! 😊';
+
+    btn.addEventListener('click', () => {
+        overlay.classList.add('compliment-overlay-exit');
+        setTimeout(() => {
+            overlay.remove();
+            // Now start the chat conversation
+            playStep('after_compliment');
+        }, 400);
+    });
+
+    inner.appendChild(label);
+    inner.appendChild(img);
+    inner.appendChild(btn);
+    overlay.appendChild(inner);
+    document.body.appendChild(overlay);
+
+    // Trigger entrance animation
+    requestAnimationFrame(() => {
+        overlay.classList.add('compliment-overlay-visible');
+    });
 }
 
 // ===== Plantactie photos =====

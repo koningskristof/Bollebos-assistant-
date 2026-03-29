@@ -370,33 +370,105 @@ body {
     white-space: nowrap;
 }
 
-/* ===== Compliment Card in Chat ===== */
-.compliment-card-wrapper {
-    border: none !important;
-    box-shadow: none !important;
+/* ===== Fullscreen Compliment Overlay ===== */
+.compliment-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
-.compliment-card-img {
-    width: 100%;
-    max-width: 320px;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-    animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    display: block;
+.compliment-overlay-visible {
+    opacity: 1;
 }
 
-@keyframes cardPop {
+.compliment-overlay-exit {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.compliment-overlay-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 90vw;
+    animation: overlayCardIn 0.5s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes overlayCardIn {
     0% {
         opacity: 0;
-        transform: scale(0.6) rotate(-3deg);
-    }
-    60% {
-        transform: scale(1.05) rotate(1deg);
+        transform: scale(0.5) rotate(-5deg);
     }
     100% {
         opacity: 1;
         transform: scale(1) rotate(0deg);
     }
+}
+
+.compliment-overlay-label {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    animation: labelPulse 2s ease-in-out infinite;
+}
+
+@keyframes labelPulse {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 1; }
+}
+
+.compliment-overlay-img {
+    width: 85vw;
+    max-width: 480px;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+.compliment-overlay-btn {
+    background: white;
+    color: var(--green-dark);
+    border: none;
+    border-radius: 28px;
+    padding: 0.85rem 2.5rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    animation: btnBounce 0.5s 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes btnBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.compliment-overlay-btn:hover {
+    background: var(--green-mid);
+    color: white;
+    transform: scale(1.05);
+}
+
+.compliment-overlay-btn:active {
+    transform: scale(0.98);
 }
 
 /* ===== Plantactie Photo Gallery ===== */
