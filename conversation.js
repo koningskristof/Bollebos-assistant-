@@ -171,29 +171,43 @@ const conversationSteps = {
         ],
         onEnter: () => showPlantactiePhotos(),
         options: [],
-        delayedNext: { step: "returning_na_fotos", delay: 2500 }
+        delayedNext: { step: "returning_impact", delay: 2500 }
     },
 
-    returning_na_fotos: {
+    returning_impact: {
         messages: [
-            "Elke boom die je ziet, staat er dankzij mensen zoals jij 🌳",
-            "Wil je opnieuw iemand blij maken?"
+            "Samen hebben we al meer dan 500 bomen geplant 🌳",
+            "En meer dan 50 gezinnen zijn komen helpen bij onze plantacties. Ouders, kinderen, grootouders — samen met de handen in de grond!",
+            "Elke boom die je daar ziet, staat er dankzij mensen zoals jij 💚"
+        ],
+        options: [],
+        autoNext: "returning_uitbreiden"
+    },
+
+    returning_uitbreiden: {
+        messages: [
+            "En nu hebben we de kans om het bos verder uit te breiden!",
+            "Maar dat kan enkel met jouw steun.",
+            "Hoe wil je helpen?"
         ],
         options: [
-            { text: "Ja! Ik wil weer steunen 💚", next: "steun_opties" },
-            { text: "Wat is er nieuw?", next: "returning_nieuw" }
+            { text: "🌳 Een boomcadeau kopen", next: "boomcadeau_detail" },
+            { text: "💌 Nieuwe wenskaarten bekijken", next: "wenskaarten_detail" },
+            { text: "💚 Vast bedrag per maand steunen", next: "vaste_steun" }
         ]
     },
 
-    returning_nieuw: {
+    vaste_steun: {
         messages: [
-            "Er zijn altijd nieuwe kaarten en boomcadeaus!",
-            "Waar ben je naar op zoek?"
+            "Wat super dat je dat overweegt! 💚",
+            "Met een klein vast bedrag per maand kunnen we blijven planten, seizoen na seizoen.",
+            "Elke euro helpt ons dichter bij een groener landschap."
         ],
+        onEnter: () => showRevealSection('vaste_steun'),
         options: [
-            { text: "Ik wil een boomcadeau geven 🌳", next: "boomcadeau_detail" },
-            { text: "Laat de wenskaarten zien 💌", next: "wenskaarten_detail" }
-        ]
+            { text: "Ik wil ook de andere opties zien", next: "cta_beide" }
+        ],
+        final: true
     },
 
     returning_niet_gesteund: {
@@ -499,8 +513,14 @@ function showRevealSection(type) {
     revealSection.style.display = 'block';
     const cardBoom = document.getElementById('cardBoomcadeau');
     const cardKaarten = document.getElementById('cardWenskaarten');
+    const cardVast = document.getElementById('cardVasteSteun');
 
-    if (type === 'boom') {
+    if (type === 'vaste_steun') {
+        cardVast.style.display = 'block';
+        cardVast.classList.add('highlighted');
+        cardBoom.style.display = 'block';
+        cardKaarten.style.display = 'block';
+    } else if (type === 'boom') {
         cardBoom.style.display = 'block';
         cardBoom.classList.add('highlighted');
         cardKaarten.style.display = 'block';
