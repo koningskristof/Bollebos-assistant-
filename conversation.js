@@ -156,13 +156,54 @@ const conversationSteps = {
     returning_visitor: {
         messages: [
             "Oh leuk, je kent Bollebos al! 😊",
-            "Fijn dat je weer even langskomt. Er zijn altijd nieuwe kaarten en boomcadeaus.",
-            "Waar kan ik je mee helpen?"
+            "Heb je ons al eens gesteund?"
         ],
         options: [
-            { text: "Ik wil een boomcadeau geven", next: "boomcadeau_detail" },
-            { text: "Laat de wenskaarten zien", next: "wenskaarten_detail" },
-            { text: "Vertel me meer over het project", next: "het_verhaal" }
+            { text: "Ja!", next: "returning_gesteund" },
+            { text: "Nee, nog niet", next: "returning_niet_gesteund" }
+        ]
+    },
+
+    returning_gesteund: {
+        messages: [
+            "Wat fijn! Dankjewel daarvoor 💚",
+            "Kijk eens wat we mede dankzij jouw steun hebben kunnen doen:"
+        ],
+        onEnter: () => showPlantactiePhotos(),
+        options: [],
+        delayedNext: { step: "returning_na_fotos", delay: 2500 }
+    },
+
+    returning_na_fotos: {
+        messages: [
+            "Elke boom die je ziet, staat er dankzij mensen zoals jij 🌳",
+            "Wil je opnieuw iemand blij maken?"
+        ],
+        options: [
+            { text: "Ja! Ik wil weer steunen 💚", next: "steun_opties" },
+            { text: "Wat is er nieuw?", next: "returning_nieuw" }
+        ]
+    },
+
+    returning_nieuw: {
+        messages: [
+            "Er zijn altijd nieuwe kaarten en boomcadeaus!",
+            "Waar ben je naar op zoek?"
+        ],
+        options: [
+            { text: "Ik wil een boomcadeau geven 🌳", next: "boomcadeau_detail" },
+            { text: "Laat de wenskaarten zien 💌", next: "wenskaarten_detail" }
+        ]
+    },
+
+    returning_niet_gesteund: {
+        messages: [
+            "Geen probleem! Fijn dat je ons kent 😊",
+            "Wil je weten hoe je Bollebos kunt steunen?"
+        ],
+        options: [
+            { text: "Ja, vertel!", next: "steun_opties" },
+            { text: "Vertel me eerst meer", next: "het_verhaal" }
         ]
     },
 
@@ -327,6 +368,48 @@ function showComplimentCard() {
     img.alt = card.text;
 
     wrapper.appendChild(img);
+    chatMessages.appendChild(wrapper);
+    scrollToBottom();
+}
+
+// ===== Plantactie photos =====
+// TODO: Vervang deze URLs met echte foto's van plantacties
+const plantactiePhotos = [
+    { src: "https://bollebos.be/images/plantactie1.jpg", caption: "Samen bomen planten 🌱" },
+    { src: "https://bollebos.be/images/plantactie2.jpg", caption: "Nieuwe bomen in de grond 🌳" },
+    { src: "https://bollebos.be/images/plantactie3.jpg", caption: "Groeiend bos dankzij jullie steun 💚" }
+];
+
+function showPlantactiePhotos() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'message message-bot compliment-card-wrapper';
+    wrapper.style.background = 'transparent';
+    wrapper.style.padding = '0';
+    wrapper.style.maxWidth = '90%';
+
+    const gallery = document.createElement('div');
+    gallery.className = 'plantactie-gallery';
+
+    plantactiePhotos.forEach((photo, i) => {
+        const item = document.createElement('div');
+        item.className = 'plantactie-item';
+        item.style.animationDelay = `${i * 0.2}s`;
+
+        const img = document.createElement('img');
+        img.src = photo.src;
+        img.alt = photo.caption;
+        img.className = 'plantactie-img';
+
+        const caption = document.createElement('span');
+        caption.className = 'plantactie-caption';
+        caption.textContent = photo.caption;
+
+        item.appendChild(img);
+        item.appendChild(caption);
+        gallery.appendChild(item);
+    });
+
+    wrapper.appendChild(gallery);
     chatMessages.appendChild(wrapper);
     scrollToBottom();
 }
