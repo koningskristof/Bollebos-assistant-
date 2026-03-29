@@ -1,8 +1,8 @@
 /**
  * Bollebos Conversational Flow — Kristof speaking
  *
- * Mimics the successful market approach:
- * 1. Hook: show a compliment card (just like on the market!)
+ * Conversation flow:
+ * 1. Hook: show a compliment card
  * 2. Casual intro as Kristof
  * 3. Tell the story, find connection points
  * 4. Ask for support (wenskaarten / boomcadeau)
@@ -29,8 +29,7 @@ const complimentCards = [
 
 const conversationSteps = {
 
-    // --- STEP 1: Compliment card as opener (just like on the market) ---
-    // This step is special — it shows a visual card, not a text message
+    // --- STEP 1: Compliment card as opener ---
     start: {
         messages: [],
         onEnter: () => {
@@ -44,7 +43,7 @@ const conversationSteps = {
     after_compliment: {
         messages: [
             "Dat was een complimentje van mij, Kristof 😄",
-            "Op markten deel ik deze kaartjes uit aan voorbijgangers. Gewoon, om hun dag mooier te maken."
+            "Ik deel graag complimentjes. Gewoon, om je dag een beetje mooier te maken."
         ],
         options: [
             { text: "Haha leuk! 😄", next: "ken_je_bollebos" },
@@ -82,7 +81,7 @@ const conversationSteps = {
     kristof_intro: {
         messages: [
             "Ik heb Bollebos gestart vanuit een simpel idee: mensen samenbrengen rond natuur.",
-            "We staan op markten, delen complimentjes aan voorbijgangers, planten bomen, en maken mooie kaarten.",
+            "We planten bomen, delen complimentjes, en maken mooie kaarten.",
             "Eigenlijk proberen we gewoon de wereld een beetje warmer en groener te maken 💚",
             "Wat spreekt jou daarin aan?"
         ],
@@ -168,8 +167,8 @@ const conversationSteps = {
     het_verhaal: {
         messages: [
             "Oké, het verhaal 😊",
-            "Het begon eigenlijk op markten. Ik deelde complimentenkaartjes uit aan voorbijgangers — gewoon, om hun dag mooier te maken.",
-            "En weet je? Mensen begonnen te lachen, te praten, te vertellen. Van die kleine momenten groeide iets groots.",
+            "Het begon met complimentjes uitdelen. Gewoon, om mensen aan het lachen te maken.",
+            "En weet je? Van die kleine, warme momenten groeide iets groots.",
             "Zo is Bollebos geboren: vanuit warmte, complimentjes, en een liefde voor bomen 🌳💚"
         ],
         options: [
@@ -235,7 +234,7 @@ const conversationSteps = {
         messages: [
             "Onze wenskaarten, daar ben ik ook trots op! 💌",
             "Ze zijn gemaakt met liefde, elke kaart heeft een mooie boodschap. En met de opbrengst planten we bomen.",
-            "Het is eigenlijk dezelfde energie als de complimentenkaartjes op de markt — iemand een glimlach bezorgen 😊",
+            "Het idee is simpel: iemand een glimlach bezorgen 😊",
             "Wil je ze zien?"
         ],
         onEnter: () => userInterests.push('kaarten'),
@@ -262,8 +261,7 @@ const conversationSteps = {
     twijfel: {
         messages: [
             "Helemaal oké, geen druk! 😊",
-            "Weet je, op markten twijfelen mensen ook vaak even. Maar zodra ze de kaarten of boomcadeaus echt zien, worden ze enthousiast.",
-            "Gewoon even kijken? Vrijblijvend, beloofd!"
+            "Misschien helpt het om gewoon even te kijken? Vrijblijvend, beloofd!"
         ],
         options: [
             { text: "Oké, laat maar zien dan 😄", next: "cta_beide" },
