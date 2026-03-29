@@ -42,7 +42,7 @@ const conversationSteps = {
 
     after_compliment: {
         messages: [
-            "Een complimentje, gewoon om je dag een beetje mooier te maken 😊",
+            "We delen graag complimentjes uit, om je dag een beetje mooier te maken 😊",
             "Ken je Bollebos al?"
         ],
         options: [
