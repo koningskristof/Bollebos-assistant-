@@ -36,51 +36,26 @@ const conversationSteps = {
             showComplimentCard();
         },
         options: [],
-        // After card is shown, auto-proceed to Kristof's intro
+        // After card is shown, auto-proceed
         delayedNext: { step: "after_compliment", delay: 1500 }
     },
 
     after_compliment: {
         messages: [
-            "Dat was een complimentje van mij, Kristof 😄",
-            "Ik deel graag complimentjes. Gewoon, om je dag een beetje mooier te maken."
-        ],
-        options: [
-            { text: "Haha leuk! 😄", next: "ken_je_bollebos" },
-            { text: "Wat lief! 😊", next: "ken_je_bollebos" },
-            { text: "Wie is Kristof? 🤔", next: "wie_is_kristof" }
-        ]
-    },
-
-    wie_is_kristof: {
-        messages: [
-            "Ik ben Kristof, een bollebosser! 🌳",
-            "Ik plant bomen, deel complimentjes, en probeer de wereld een beetje warmer te maken.",
+            "Een complimentje, gewoon om je dag een beetje mooier te maken 😊",
             "Ken je Bollebos al?"
         ],
         options: [
-            { text: "Nee, vertel!", next: "kristof_intro" },
+            { text: "Nee, wat is het?", next: "bollebos_intro" },
             { text: "Ja!", next: "returning_visitor" },
-            { text: "Klinkt bekend", next: "kristof_intro" }
+            { text: "De naam klinkt bekend", next: "bollebos_intro" }
         ]
     },
 
-    ken_je_bollebos: {
+    // --- Bollebos intro (Kristof stelt zich nog niet voor) ---
+    bollebos_intro: {
         messages: [
-            "Blij dat het je dag een beetje mooier maakt! 😊",
-            "Ken je Bollebos al?"
-        ],
-        options: [
-            { text: "Nee, wat is het?", next: "kristof_intro" },
-            { text: "Ja!", next: "returning_visitor" },
-            { text: "De naam klinkt bekend", next: "kristof_intro" }
-        ]
-    },
-
-    // --- Kristof's intro ---
-    kristof_intro: {
-        messages: [
-            "Ik heb Bollebos gestart vanuit een simpel idee: mensen samenbrengen rond natuur.",
+            "Bollebos brengt mensen samen rond natuur 🌳",
             "We planten bomen, delen complimentjes, en maken mooie kaarten.",
             "Eigenlijk proberen we gewoon de wereld een beetje warmer en groener te maken 💚",
             "Wat spreekt jou daarin aan?"
@@ -158,7 +133,7 @@ const conversationSteps = {
             "Wat vind je daarvan?"
         ],
         options: [
-            { text: "Prachtig idee, Kristof!", next: "positive_reaction" },
+            { text: "Prachtig idee!", next: "positive_reaction" },
             { text: "Hoe werkt zo'n boomcadeau?", next: "boomcadeau_detail" },
             { text: "Vertel over de kaarten", next: "wenskaarten_detail" }
         ]
@@ -167,7 +142,7 @@ const conversationSteps = {
     het_verhaal: {
         messages: [
             "Oké, het verhaal 😊",
-            "Het begon met complimentjes uitdelen. Gewoon, om mensen aan het lachen te maken.",
+            "Ik ben Kristof. Het begon met complimentjes uitdelen. Gewoon, om mensen aan het lachen te maken.",
             "En weet je? Van die kleine, warme momenten groeide iets groots.",
             "Zo is Bollebos geboren: vanuit warmte, complimentjes, en een liefde voor bomen 🌳💚"
         ],
