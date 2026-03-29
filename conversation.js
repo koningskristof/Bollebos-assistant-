@@ -2,7 +2,7 @@
  * Bollebos Conversational Flow — Kristof speaking
  *
  * Mimics the successful market approach:
- * 1. Hook (random opener — fun question, weetje, or warm greeting)
+ * 1. Hook: show a compliment card (just like on the market!)
  * 2. Casual intro as Kristof
  * 3. Tell the story, find connection points
  * 4. Ask for support (wenskaarten / boomcadeau)
@@ -15,128 +15,66 @@ const revealSection = document.getElementById('revealSection');
 // Track conversation state for personalized CTA
 let userInterests = [];
 
-// ===== Random opener system =====
-// Different hooks to keep it fresh — like having different compliment cards
-
-const openers = [
-    // Opener A: Fun question
-    {
-        messages: [
-            "Hey! Ik ben Kristof 👋",
-            "Snelle vraag: als jij een boom mocht planten, waar zou dat zijn?"
-        ],
-        options: [
-            { text: "In mijn eigen tuin!", next: "opener_react_tuin" },
-            { text: "Ergens in een bos 🌲", next: "opener_react_bos" },
-            { text: "Geen idee eigenlijk 😅", next: "opener_react_geen_idee" }
-        ]
-    },
-    // Opener B: Fun fact
-    {
-        messages: [
-            "Hey! Kristof hier 👋",
-            "Wist je dat één boom genoeg zuurstof maakt voor twee mensen per jaar? Ik vind dat nog altijd mind-blowing 🌳"
-        ],
-        options: [
-            { text: "Wow, dat wist ik niet!", next: "weetje_react" },
-            { text: "Cool! Wie ben je?", next: "weetje_react" },
-            { text: "Waarom vertel je me dit? 😄", next: "weetje_react" }
-        ]
-    },
-    // Opener C: Seasonal / weather
-    {
-        messages: [
-            "Hey! Ik ben Kristof 👋",
-            "Zeg, ben jij ook zo iemand die blij wordt van een wandeling in het groen? Of ben ik de enige? 😄"
-        ],
-        options: [
-            { text: "Ja, helemaal!", next: "wandeling_react_ja" },
-            { text: "Hangt van het weer af 😅", next: "wandeling_react_weer" },
-            { text: "Wie is Kristof? 🤔", next: "wandeling_react_wie" }
-        ]
-    }
+// ===== Compliment cards — the real Bollebos ones! =====
+const complimentCards = [
+    { text: "jij bent super koeeeeewl", emoji: "🐄", bg: "#a4d65e", color: "#fff" },
+    { text: "jij bent zo bij-zonder", emoji: "🐝", bg: "#f4a0a0", color: "#fff" },
+    { text: "zoals jij is er maar één - d", emoji: "🦆", bg: "#4dc9f6", color: "#fff" },
+    { text: "je bent olifant-astisch", emoji: "🐘", bg: "#8ecfb0", color: "#fff" },
+    { text: "ik vind je gans sjiek!", emoji: "🪿", bg: "#4dc9f6", color: "#fff" }
 ];
 
 // ===== Conversation Tree =====
 
 const conversationSteps = {
 
-    // --- Opener reactions (all lead to casual intro) ---
-
-    opener_react_tuin: {
-        messages: [
-            "In je eigen tuin! Dat is het mooiste eigenlijk, elke dag naar buiten kijken en zien hoe die groeit 🌱",
-            "Ik ben trouwens Kristof, ik doe iets met bomen en mensen blij maken. Klinkt vaag hè? 😄"
-        ],
-        options: [
-            { text: "Haha, een beetje ja!", next: "kristof_intro" },
-            { text: "Klinkt interessant!", next: "kristof_intro" }
-        ]
-    },
-
-    opener_react_bos: {
-        messages: [
-            "In een bos! Mooi, een boom tussen z'n soortgenoten 🌲",
-            "Ik ben trouwens Kristof. Ik plant effectief bomen — geen grap. Mag ik je even vertellen waarom?"
-        ],
-        options: [
-            { text: "Ja, vertel!", next: "kristof_intro" },
-            { text: "Echt? Hoe dan?", next: "kristof_intro" }
-        ]
-    },
-
-    opener_react_geen_idee: {
-        messages: [
-            "Geen stress! De meeste mensen hebben daar nog nooit over nagedacht 😄",
-            "Ik ben Kristof, en ik denk eigenlijk de hele dag over bomen na. Klinkt raar, maar het is best leuk!"
-        ],
-        options: [
-            { text: "Haha, vertel!", next: "kristof_intro" },
-            { text: "Oké, ik luister 😄", next: "kristof_intro" }
-        ]
-    },
-
-    weetje_react: {
-        messages: [
-            "Haha ja, ik gooi graag leuke weetjes rond 😄",
-            "Ik ben Kristof. Ik ben nogal bezig met bomen en natuur — het is eigenlijk een heel verhaal."
-        ],
-        options: [
-            { text: "Vertel!", next: "kristof_intro" },
-            { text: "Ik ben benieuwd", next: "kristof_intro" },
-            { text: "Hou het kort 😄", next: "kristof_intro_kort" }
-        ]
-    },
-
-    wandeling_react_ja: {
-        messages: [
-            "Ah top, dan zijn we al twee! 😄",
-            "Ik ben Kristof. Mijn liefde voor natuur is een beetje uit de hand gelopen... op de mooiste manier."
-        ],
-        options: [
-            { text: "Hoe bedoel je?", next: "kristof_intro" },
-            { text: "Klinkt goed!", next: "kristof_intro" }
-        ]
-    },
-
-    wandeling_react_weer: {
-        messages: [
-            "Haha fair enough! Ik ga bij elk weer naar buiten, ik ben een beetje gek 😅",
-            "Ik ben Kristof trouwens. Ik doe iets met natuur en ik zou je er graag even over vertellen."
-        ],
-        options: [
-            { text: "Ga je gang!", next: "kristof_intro" },
-            { text: "Oké, kort dan 😄", next: "kristof_intro_kort" }
-        ]
-    },
-
-    wandeling_react_wie: {
-        messages: [
-            "Goede vraag! Ik ben Kristof, een bollebosser 🌳",
-            "Ik vertel je zo wat dat betekent — maar eerst..."
-        ],
+    // --- STEP 1: Compliment card as opener (just like on the market) ---
+    // This step is special — it shows a visual card, not a text message
+    start: {
+        messages: [],
+        onEnter: () => {
+            showComplimentCard();
+        },
         options: [],
-        autoNext: "kristof_intro"
+        // After card is shown, auto-proceed to Kristof's intro
+        delayedNext: { step: "after_compliment", delay: 1500 }
+    },
+
+    after_compliment: {
+        messages: [
+            "Dat was een complimentje van mij, Kristof 😄",
+            "Op markten deel ik deze kaartjes uit aan voorbijgangers. Gewoon, om hun dag mooier te maken."
+        ],
+        options: [
+            { text: "Haha leuk! 😄", next: "ken_je_bollebos" },
+            { text: "Wat lief! 😊", next: "ken_je_bollebos" },
+            { text: "Wie is Kristof? 🤔", next: "wie_is_kristof" }
+        ]
+    },
+
+    wie_is_kristof: {
+        messages: [
+            "Ik ben Kristof, een bollebosser! 🌳",
+            "Ik plant bomen, deel complimentjes, en probeer de wereld een beetje warmer te maken.",
+            "Ken je Bollebos al?"
+        ],
+        options: [
+            { text: "Nee, vertel!", next: "kristof_intro" },
+            { text: "Ja!", next: "returning_visitor" },
+            { text: "Klinkt bekend", next: "kristof_intro" }
+        ]
+    },
+
+    ken_je_bollebos: {
+        messages: [
+            "Blij dat het je dag een beetje mooier maakt! 😊",
+            "Ken je Bollebos al?"
+        ],
+        options: [
+            { text: "Nee, wat is het?", next: "kristof_intro" },
+            { text: "Ja!", next: "returning_visitor" },
+            { text: "De naam klinkt bekend", next: "kristof_intro" }
+        ]
     },
 
     // --- Kristof's intro ---
@@ -152,18 +90,6 @@ const conversationSteps = {
             { text: "Mooie kaarten klinkt leuk 💌", next: "interest_cadeau" },
             { text: "Het verhaal erachter", next: "het_verhaal" },
             { text: "Alles eigenlijk! 😄", next: "interest_benieuwd" }
-        ]
-    },
-
-    kristof_intro_kort: {
-        messages: [
-            "Kort dan: ik plant bomen en maak mensen blij. Dat is Bollebos in één zin! 🌳😄",
-            "Maar nu jij — wat vind je leuker?"
-        ],
-        options: [
-            { text: "Bomen! 🌳", next: "interest_natuur" },
-            { text: "Mensen blij maken! 💌", next: "interest_cadeau" },
-            { text: "Allebei!", next: "interest_benieuwd" }
         ]
     },
 
@@ -412,6 +338,35 @@ function addMessage(text, isUser = false) {
     scrollToBottom();
 }
 
+function showComplimentCard() {
+    const card = complimentCards[Math.floor(Math.random() * complimentCards.length)];
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'message message-bot compliment-card-wrapper';
+    wrapper.style.background = 'transparent';
+    wrapper.style.padding = '0';
+    wrapper.style.maxWidth = '90%';
+
+    const cardEl = document.createElement('div');
+    cardEl.className = 'compliment-card';
+    cardEl.style.background = card.bg;
+    cardEl.style.color = card.color;
+
+    const emojiEl = document.createElement('span');
+    emojiEl.className = 'compliment-emoji';
+    emojiEl.textContent = card.emoji;
+
+    const textEl = document.createElement('span');
+    textEl.className = 'compliment-text';
+    textEl.textContent = card.text;
+
+    cardEl.appendChild(emojiEl);
+    cardEl.appendChild(textEl);
+    wrapper.appendChild(cardEl);
+    chatMessages.appendChild(wrapper);
+    scrollToBottom();
+}
+
 function addTypingIndicator() {
     const indicator = document.createElement('div');
     indicator.className = 'typing-indicator';
@@ -460,6 +415,13 @@ async function playStep(stepName) {
         removeTypingIndicator();
         addMessage(step.messages[i]);
         await delay(300);
+    }
+
+    // Handle delayed next (used for compliment card)
+    if (step.delayedNext) {
+        await delay(step.delayedNext.delay);
+        playStep(step.delayedNext.step);
+        return;
     }
 
     // Show options or auto-proceed
@@ -520,10 +482,7 @@ function highlightProduct(type) {
     }, 500);
 }
 
-// ===== Start with a random opener =====
+// ===== Start the conversation =====
 setTimeout(() => {
-    const opener = openers[Math.floor(Math.random() * openers.length)];
-    // Inject the random opener as the "start" step
-    conversationSteps.start = opener;
     playStep('start');
 }, 800);
