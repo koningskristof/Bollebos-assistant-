@@ -16,12 +16,13 @@ const revealSection = document.getElementById('revealSection');
 let userInterests = [];
 
 // ===== Compliment cards — the real Bollebos ones! =====
+const CARD_BASE_URL = "https://complimenten.bollebos.be/images/cards/";
 const complimentCards = [
-    { text: "jij bent super koeeeeewl", emoji: "🐄", bg: "#a4d65e", color: "#fff" },
-    { text: "jij bent zo bij-zonder", emoji: "🐝", bg: "#f4a0a0", color: "#fff" },
-    { text: "zoals jij is er maar één - d", emoji: "🦆", bg: "#4dc9f6", color: "#fff" },
-    { text: "je bent olifant-astisch", emoji: "🐘", bg: "#8ecfb0", color: "#fff" },
-    { text: "ik vind je gans sjiek!", emoji: "🪿", bg: "#4dc9f6", color: "#fff" }
+    { text: "jij bent super koeeeeewl", image: CARD_BASE_URL + "koewl.png" },
+    { text: "jij bent zo bij-zonder", image: CARD_BASE_URL + "bijzonder.png" },
+    { text: "zoals jij is er maar één - d", image: CARD_BASE_URL + "eend.png" },
+    { text: "je bent olifant-astisch", image: CARD_BASE_URL + "olifant.png" },
+    { text: "ik vind je gans sjiek!", image: CARD_BASE_URL + "gans.png" }
 ];
 
 // ===== Conversation Tree =====
@@ -347,22 +348,12 @@ function showComplimentCard() {
     wrapper.style.padding = '0';
     wrapper.style.maxWidth = '90%';
 
-    const cardEl = document.createElement('div');
-    cardEl.className = 'compliment-card';
-    cardEl.style.background = card.bg;
-    cardEl.style.color = card.color;
+    const img = document.createElement('img');
+    img.className = 'compliment-card-img';
+    img.src = card.image;
+    img.alt = card.text;
 
-    const emojiEl = document.createElement('span');
-    emojiEl.className = 'compliment-emoji';
-    emojiEl.textContent = card.emoji;
-
-    const textEl = document.createElement('span');
-    textEl.className = 'compliment-text';
-    textEl.textContent = card.text;
-
-    cardEl.appendChild(emojiEl);
-    cardEl.appendChild(textEl);
-    wrapper.appendChild(cardEl);
+    wrapper.appendChild(img);
     chatMessages.appendChild(wrapper);
     scrollToBottom();
 }
