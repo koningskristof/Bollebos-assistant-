@@ -54,9 +54,8 @@ const conversationSteps = {
     // --- Bollebos intro (Kristof stelt zich nog niet voor) ---
     bollebos_intro: {
         messages: [
-            "Bollebos brengt mensen samen rond natuur 🌳",
-            "We planten bomen, delen complimentjes, en maken mooie kaarten.",
-            "Eigenlijk proberen we gewoon de wereld een beetje warmer en groener te maken 💚",
+            "Bollebos plant bossen in Haspengouw 🌳",
+            "Niet alleen voor het klimaat en voor biodiversiteit, maar omdat we rust en energie vinden in de natuur 💚",
             "Wat spreekt jou daarin aan?"
         ],
         options: [
