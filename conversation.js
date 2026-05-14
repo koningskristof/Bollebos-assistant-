@@ -15,6 +15,12 @@ const revealSection = document.getElementById('revealSection');
 // Track conversation state for personalized CTA
 let userInterests = [];
 
+// ===== Be Planet — Het Goede Moment campagne =====
+// Be Planet verdubbelt elke euro tot €3.000 per project, tot 18 juni 2026.
+// Doel: bosuitbreiding in Hoeselt + nieuwe gedenkplek.
+const BEPLANET_URL = "https://bollebos.be/hetgoedemoment";
+const BEPLANET_DEADLINE = "18 juni";
+
 // ===== Compliment cards — the real Bollebos ones! =====
 const CARD_BASE_URL = "https://complimenten.bollebos.be/images/cards/";
 const complimentCards = [
@@ -57,13 +63,14 @@ const conversationSteps = {
             "Bollebos brengt mensen samen rond natuur 🌳",
             "We planten bomen, delen complimentjes, en maken mooie kaarten.",
             "Eigenlijk proberen we gewoon de wereld een beetje warmer en groener te maken 💚",
+            `En net nu hebben we een extra mooi moment: Be Planet verdubbelt tot ${BEPLANET_DEADLINE} elke euro die we ophalen voor ons bos in Hoeselt ✨`,
             "Wat spreekt jou daarin aan?"
         ],
         options: [
+            { text: "Verdubbelen? Vertel! ✨", next: "beplanet_actie" },
             { text: "De bomen! 🌳", next: "interest_natuur" },
             { text: "Mooie kaarten klinkt leuk 💌", next: "interest_cadeau" },
-            { text: "Het verhaal erachter", next: "het_verhaal" },
-            { text: "Alles eigenlijk! 😄", next: "interest_benieuwd" }
+            { text: "Het verhaal erachter", next: "het_verhaal" }
         ]
     },
 
@@ -88,12 +95,13 @@ const conversationSteps = {
             "Een bomenliefhebber! Dan snap je mij 😄",
             "Ik ben begonnen met het planten van bomen, en daar is een heel project uit gegroeid.",
             "Elke boom die we planten is een stukje toekomst. En het mooie: iedereen kan meedoen.",
-            "Wil je weten hoe?"
+            `En juist nu telt elke euro dubbel: Be Planet verdubbelt elke gift tot ${BEPLANET_DEADLINE} 🌳✨`,
+            "Wil je weten hoe je kunt helpen?"
         ],
         onEnter: () => userInterests.push('natuur'),
         options: [
+            { text: "Verdubbelen? Hoe werkt dat? ✨", next: "beplanet_actie" },
             { text: "Ja! Hoe kan ik meedoen?", next: "meedoen" },
-            { text: "Vertel meer over het project", next: "het_verhaal" },
             { text: "Kan ik iemand een boom geven?", next: "boomcadeau_detail" }
         ]
     },
@@ -103,13 +111,14 @@ const conversationSteps = {
             "Dat vind ik mooi om te horen! 🌍",
             "Ik geloof echt dat kleine dingen groot verschil maken. Een boom planten, een kaart sturen met een mooie boodschap...",
             "Dat is wat ik elke dag probeer te doen met Bollebos.",
+            `En momenteel loopt er een unieke kans: Be Planet verdubbelt elke gift tot ${BEPLANET_DEADLINE} via 'Het Goede Moment' ✨`,
             "Hoe zou jij willen bijdragen?"
         ],
         onEnter: () => userInterests.push('planeet'),
         options: [
+            { text: "Verdubbelde donatie via Be Planet ✨", next: "beplanet_actie" },
             { text: "Een boom planten via een cadeau 🌳", next: "boomcadeau_detail" },
-            { text: "Een kaart sturen met impact 💌", next: "wenskaarten_detail" },
-            { text: "Vertel me eerst meer over jouw verhaal", next: "het_verhaal" }
+            { text: "Een kaart sturen met impact 💌", next: "wenskaarten_detail" }
         ]
     },
 
@@ -185,11 +194,12 @@ const conversationSteps = {
 
     returning_uitbreiden: {
         messages: [
-            "En nu hebben we de kans om het bos verder uit te breiden!",
-            "Maar dat kan enkel met jouw steun.",
+            "En nu hebben we de kans om het bos in Hoeselt verder uit te breiden — en er voor het eerst een gedenkplek in te maken 🌳",
+            `Het mooie: via 'Het Goede Moment' van Be Planet wordt elke euro verdubbeld, tot ${BEPLANET_DEADLINE}. Jouw 25 euro wordt 50 euro impact ✨`,
             "Hoe wil je helpen?"
         ],
         options: [
+            { text: "✨ Verdubbelde donatie via Be Planet", next: "beplanet_actie" },
             { text: "🌳 Een boomcadeau kopen", next: "boomcadeau_detail" },
             { text: "💌 Nieuwe wenskaarten bekijken", next: "wenskaarten_detail" },
             { text: "💚 Vast bedrag per maand steunen", next: "vaste_steun" }
@@ -277,12 +287,44 @@ const conversationSteps = {
     // --- Support options ---
     steun_opties: {
         messages: [
-            "Er zijn twee manieren waarop je kunt helpen:"
+            "Er zijn verschillende manieren om te helpen:",
+            `En tot ${BEPLANET_DEADLINE} loopt er nog een extra-mooie kans: Be Planet verdubbelt elke directe gift via 'Het Goede Moment' ✨`
         ],
         options: [
-            { text: "💌 Wenskaarten bekijken", next: "cta_kaarten" },
+            { text: "✨ Verdubbelde donatie (Be Planet)", next: "beplanet_actie" },
             { text: "🌳 Een boom cadeau geven", next: "cta_boom" },
-            { text: "Allebei! 😄", next: "cta_beide" }
+            { text: "💌 Wenskaarten bekijken", next: "cta_kaarten" },
+            { text: "Toon me alles 😄", next: "cta_beide" }
+        ]
+    },
+
+    // --- Be Planet "Het Goede Moment" doubling campaign ---
+    beplanet_actie: {
+        messages: [
+            "Dit is echt een uniek moment 🌟",
+            `Via 'Het Goede Moment' van Be Planet wordt elke euro die je nu geeft verdubbeld — tot ${BEPLANET_DEADLINE}.`,
+            "Met dat geld doen we twee dingen tegelijk: het bos in Hoeselt uitbreiden, én voor het eerst een gedenkplek aanleggen — een rustige plek voor wie iemand mist of even tot rust wil komen 💚",
+            "Be Planet verdubbelt tot €3.000 per project. Dus elke gift die jij doet, telt letterlijk dubbel.",
+            "Wil je meedoen?"
+        ],
+        onEnter: () => userInterests.push('beplanet'),
+        options: [
+            { text: "Ja, ik geef nu! ✨", next: "cta_beplanet" },
+            { text: "Hoe weet ik dat het verdubbeld wordt?", next: "beplanet_uitleg" },
+            { text: "Ik wil ook de andere opties zien", next: "cta_beide" }
+        ]
+    },
+
+    beplanet_uitleg: {
+        messages: [
+            "Goeie vraag 😊",
+            "Be Planet is een Belgische stichting die natuur- en klimaatprojecten ondersteunt. Hun campagne 'Het Goede Moment' is een matching-actie: jij geeft via hun platform, en zij leggen er hetzelfde bedrag bij — tot €3.000 per project.",
+            `De actie loopt tot ${BEPLANET_DEADLINE}. Daarna stopt de verdubbeling, dus nu is echt het goede moment 😉`,
+            "Klaar om bij te dragen?"
+        ],
+        options: [
+            { text: "Ja, ik geef nu! ✨", next: "cta_beplanet" },
+            { text: "Misschien liever een boomcadeau", next: "boomcadeau_detail" }
         ]
     },
 
@@ -299,6 +341,28 @@ const conversationSteps = {
     },
 
     // --- CTA endpoints ---
+    cta_beplanet: {
+        messages: [
+            "Geweldig! 🎉",
+            `Hieronder vind je de link naar 'Het Goede Moment'. Elke euro die je daar geeft wordt verdubbeld door Be Planet, tot ${BEPLANET_DEADLINE}.`,
+            "Dankjewel — dit soort steun maakt het verschil voor het bos én voor de gedenkplek 💚🌳"
+        ],
+        onEnter: () => showRevealSection('beplanet'),
+        options: [
+            { text: "Ik wil ook de andere opties zien", next: "cta_beide_na_beplanet" }
+        ],
+        final: true
+    },
+
+    cta_beide_na_beplanet: {
+        messages: [
+            "Natuurlijk! Alle opties staan er nu bij 💚"
+        ],
+        onEnter: () => showRevealSection('alles'),
+        options: [],
+        final: true
+    },
+
     cta_boom: {
         messages: [
             "Top! 🎉",
@@ -538,8 +602,16 @@ function showRevealSection(type) {
     const cardBoom = document.getElementById('cardBoomcadeau');
     const cardKaarten = document.getElementById('cardWenskaarten');
     const cardVast = document.getElementById('cardVasteSteun');
+    const cardBeplanet = document.getElementById('cardBeplanet');
 
-    if (type === 'vaste_steun') {
+    // Be Planet card is always shown while the action runs — it's the most urgent option.
+    cardBeplanet.style.display = 'block';
+
+    if (type === 'beplanet') {
+        cardBeplanet.classList.add('highlighted');
+        cardBoom.style.display = 'block';
+        cardKaarten.style.display = 'block';
+    } else if (type === 'vaste_steun') {
         cardVast.style.display = 'block';
         cardVast.classList.add('highlighted');
         cardBoom.style.display = 'block';
@@ -552,6 +624,10 @@ function showRevealSection(type) {
         cardKaarten.style.display = 'block';
         cardKaarten.classList.add('highlighted');
         cardBoom.style.display = 'block';
+    } else if (type === 'alles') {
+        cardBoom.style.display = 'block';
+        cardKaarten.style.display = 'block';
+        cardVast.style.display = 'block';
     } else {
         cardBoom.style.display = 'block';
         cardKaarten.style.display = 'block';
@@ -567,6 +643,8 @@ function highlightProduct(type) {
         document.getElementById('cardWenskaarten').classList.add('highlighted');
     } else if (type === 'boom') {
         document.getElementById('cardBoomcadeau').classList.add('highlighted');
+    } else if (type === 'beplanet') {
+        document.getElementById('cardBeplanet').classList.add('highlighted');
     }
     setTimeout(() => {
         revealSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
